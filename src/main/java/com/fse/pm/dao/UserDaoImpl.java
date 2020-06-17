@@ -77,9 +77,6 @@ public class UserDaoImpl implements IUserDao {
 			 
 			Query<User> query = session.createQuery(createQuery);
 			results = query.getResultList();
-			//Transaction beginTransaction = session.beginTransaction();
-//			project = (Project)session.
-//			beginTransaction.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {

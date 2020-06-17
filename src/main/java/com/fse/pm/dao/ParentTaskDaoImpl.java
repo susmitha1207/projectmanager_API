@@ -15,23 +15,23 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.fse.pm.pojos.Project;
+import com.fse.pm.pojos.ParentTask;
 
-@Repository("projectDao")
-public class ProjectDaoImpl implements IProjectDao{
-	
+@Repository("parentTaskDao")
+public class ParentTaskDaoImpl implements IParentTaskDao {
+
 	@Autowired 
 	private EntityManagerFactory entityManagerFactory;
-
+	
 	@Override
-	public Integer saveOrUpadte(Project project) {
+	public Integer saveOrUpadte(ParentTask parentTask) {
 		Integer result=0;
 		SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
 		Session session=null;
 		try {
 			session=sessionFactory.openSession();
 			Transaction beginTransaction = session.beginTransaction();
-			 result = (Integer) session.save(project);
+			 result = (Integer) session.save(parentTask);
 			 beginTransaction.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -41,16 +41,16 @@ public class ProjectDaoImpl implements IProjectDao{
 		
 		return result;
 	}
-	
+
 	@Override
-	public Project getProject(Integer id) {
-		Project project=null;
+	public ParentTask getParentTask(Integer id) {
+		ParentTask parentTask=null;
 		SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
 		Session session=null;
 		try {
 			session=sessionFactory.openSession();
 			Transaction beginTransaction = session.beginTransaction();
-			project = (Project)session.get(Project.class, id);
+			parentTask = (ParentTask)session.get(ParentTask.class, id);
 			beginTransaction.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -58,22 +58,22 @@ public class ProjectDaoImpl implements IProjectDao{
 			session.close();
 		}
 		
-		return project;
+		return parentTask;
 	}
 
 	@Override
-	public List<Project> view() {
-		List<Project> results=new ArrayList<>();
+	public List<ParentTask> view() {
+		List<ParentTask> results=new ArrayList<>();
 		SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
 		Session session=null;
 		try {
 			session=sessionFactory.openSession();
 			CriteriaBuilder cb = session.getCriteriaBuilder();
-			CriteriaQuery<Project> createQuery = cb.createQuery(Project.class);
-			Root<Project> root = createQuery.from(Project.class);
+			CriteriaQuery<ParentTask> createQuery = cb.createQuery(ParentTask.class);
+			Root<ParentTask> root = createQuery.from(ParentTask.class);
 			createQuery.select(root);
 			 
-			Query<Project> query = session.createQuery(createQuery);
+			Query<ParentTask> query = session.createQuery(createQuery);
 			results = query.getResultList();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -85,7 +85,20 @@ public class ProjectDaoImpl implements IProjectDao{
 
 	@Override
 	public Integer delete(Integer id) {
-		// TODO Auto-generated method stub
+		SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
+		Session session=null;
+		try {
+			session=sessionFactory.openSession();
+			Transaction beginTransaction = session.beginTransaction();
+			ParentTask parentTask = (ParentTask)session.get(ParentTask.class, id);
+			session.delete(parentTask);
+			beginTransaction.commit();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			session.close();
+		}
 		return null;
 	}
 
